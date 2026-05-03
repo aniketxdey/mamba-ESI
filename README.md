@@ -6,13 +6,12 @@
 > *Based on the original Mamba architecture by Albert Gu, Tri Dao*\
 > Original Paper: https://arxiv.org/abs/2312.00752
 
-## About
+## Abstract
 
-Mamba-ESI extends the Mamba sequence model architecture with an embedding search and injection (ESI) mechanism to efficiently handle long input sequences, such as entire textbooks. While the original Mamba showed promising performance on information-dense data like language modeling, efficiently capturing and utilizing relevant information from distant parts of very long sequences remained challenging.
+Sequence modeling has made significant strides with the advent of powerful architectures like Transformers. However, efficiently handling long input sequences, such as entire textbooks, remains a challenge. Existing approaches often struggle to capture and utilize relevant information from distant parts of the sequence, leading to sub-optimal performance on tasks like question answering. In this paper, we propose Mamba-ESI, an extension to the Mamba sequence model that introduces an embedding search and injection mechanism to selectively amplify relevant information from the input sequence. By computing embedding for the question and input tokens, Mamba-ESI performs a similarity search to identify the most relevant tokens and injects their corresponding hidden states into the current hidden state of the model, effectively performing kernel trick on the fly. This approach enables Mamba-ESI to dynamically attend to pertinent information without the need to store and process the entire memory tensor. We conduct experiments on a range of long-sequence tasks, including textbook question answering, and demonstrate that Mamba-ESI achieves competitive performance while maintaining significant memory and computational efficiency compared to state-of-the-art methods. Furthermore, we analyze the impact of various design choices, such as the embedding function and injection mechanism, on the model's performance. Our results highlight the effectiveness of embedding search and injection in enabling efficient and accurate sequence modeling for long input sequences, paving the way for more scalable and versatile sequence models.
 
-Mamba-ESI addresses this by introducing a dynamic attention mechanism that computes embeddings for questions and input tokens, performs similarity search to identify the most relevant tokens, and injects their corresponding hidden states into the current model state. This approach enables the model to selectively amplify pertinent information without storing and processing the entire memory tensor, effectively performing a kernel trick on the fly.
-
-The architecture is built upon the original Mamba's efficient hardware-aware design and selective state space model foundation, with significant memory and computational efficiency improvements for long-sequence tasks like textbook question answering.
+### Benchmark Performance:
+<img width="691" alt="Screenshot 2024-11-07 at 5 34 48 PM" src="https://github.com/user-attachments/assets/ee3c52d9-6c0d-4fa2-9c22-7b77aaafad74">
 
 ## Installation
 
