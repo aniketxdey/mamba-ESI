@@ -2,7 +2,7 @@
 
 ![Mamba](assets/selection.png "Selective State Space")
 > **Mamba-ESI: Introducing Embedding Search to Selective SSMs**\
-> Peter Chin (Advisor), Yu-Wing Tai (Advisor), Abhinav Reddy, Aniket Dey\
+> Yu-Wing Tai (Advisor), Abhinav Reddy, Aniket Dey\
 > *Based on the original Mamba architecture by Albert Gu, Tri Dao*\
 > Original Paper: https://arxiv.org/abs/2312.00752
 
