@@ -2,7 +2,17 @@
 
 import torch
 import torch.nn.functional as F
-from torch.cuda.amp import custom_bwd, custom_fwd
+
+try:
+    from torch.cuda.amp import custom_bwd, custom_fwd
+except ImportError:  # pragma: no cover - very old torch
+    def custom_bwd(fn):
+        return fn
+
+    def custom_fwd(fn=None, **_kwargs):
+        if fn is None:
+            return lambda f: f
+        return fn
 
 from einops import rearrange, repeat
 
@@ -13,7 +23,12 @@ except ImportError:
     causal_conv1d_fn = None
     causal_conv1d_cuda = None
 
-import selective_scan_cuda
+try:
+    import selective_scan_cuda  # type: ignore
+    _HAS_SELECTIVE_SCAN_CUDA = True
+except ImportError:
+    selective_scan_cuda = None  # type: ignore
+    _HAS_SELECTIVE_SCAN_CUDA = False
 
 
 class SelectiveScanFn(torch.autograd.Function):
@@ -84,8 +99,16 @@ def selective_scan_fn(u, delta, A, B, C, D=None, z=None, delta_bias=None, delta_
     """if return_last_state is True, returns (out, last_state)
     last_state has shape (batch, dim, dstate). Note that the gradient of the last state is
     not considered in the backward pass.
+
+    When the fused CUDA kernel is unavailable, falls back transparently to the
+    pure-PyTorch reference implementation so the model still runs on CPU/MPS.
     """
-    return SelectiveScanFn.apply(u, delta, A, B, C, D, z, delta_bias, delta_softplus, return_last_state)
+    if _HAS_SELECTIVE_SCAN_CUDA:
+        return SelectiveScanFn.apply(u, delta, A, B, C, D, z, delta_bias, delta_softplus, return_last_state)
+    return selective_scan_ref(
+        u, delta, A, B, C, D=D, z=z, delta_bias=delta_bias,
+        delta_softplus=delta_softplus, return_last_state=return_last_state,
+    )
 
 
 def selective_scan_ref(u, delta, A, B, C, D=None, z=None, delta_bias=None, delta_softplus=False,
@@ -314,9 +337,17 @@ def mamba_inner_fn(
     A, B=None, C=None, D=None, delta_bias=None, B_proj_bias=None,
     C_proj_bias=None, delta_softplus=True
 ):
-    return MambaInnerFn.apply(xz, conv1d_weight, conv1d_bias, x_proj_weight, delta_proj_weight,
-                              out_proj_weight, out_proj_bias,
-                              A, B, C, D, delta_bias, B_proj_bias, C_proj_bias, delta_softplus)
+    if _HAS_SELECTIVE_SCAN_CUDA and causal_conv1d_cuda is not None:
+        return MambaInnerFn.apply(xz, conv1d_weight, conv1d_bias, x_proj_weight, delta_proj_weight,
+                                  out_proj_weight, out_proj_bias,
+                                  A, B, C, D, delta_bias, B_proj_bias, C_proj_bias, delta_softplus)
+    # CPU / MPS fallback path used when the CUDA kernels are not available.
+    return mamba_inner_ref(
+        xz, conv1d_weight, conv1d_bias, x_proj_weight, delta_proj_weight,
+        out_proj_weight, out_proj_bias,
+        A, B=B, C=C, D=D, delta_bias=delta_bias,
+        B_proj_bias=B_proj_bias, C_proj_bias=C_proj_bias, delta_softplus=delta_softplus,
+    )
 
 
 def mamba_inner_ref(

@@ -24,8 +24,8 @@ except ImportError:
 
 try:
     from mamba_ssm.ops.triton.layernorm import RMSNorm, layer_norm_fn, rms_norm_fn
-except ImportError:
-    RMSNorm, layer_norm_fn, rms_norm_fn = None, None, None
+except (ImportError, ModuleNotFoundError):
+    from mamba_ssm.ops.cpu_fallbacks import RMSNorm, layer_norm_fn, rms_norm_fn
 
 
 class Mamba(nn.Module):

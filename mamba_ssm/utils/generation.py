@@ -11,7 +11,29 @@ import torch.nn.functional as F
 from einops import rearrange, repeat
 from torch import Tensor
 from torch.profiler import ProfilerActivity, profile, record_function
-from transformers.generation import GreedySearchDecoderOnlyOutput, SampleDecoderOnlyOutput, TextStreamer
+try:
+    from transformers.generation import (
+        GreedySearchDecoderOnlyOutput,
+        SampleDecoderOnlyOutput,
+        TextStreamer,
+    )
+except ImportError:
+    # ``GreedySearchDecoderOnlyOutput`` and ``SampleDecoderOnlyOutput`` were
+    # removed in transformers >= 4.45. Provide local shims so the rest of the
+    # generation utilities keep working unchanged.
+    try:
+        from transformers.generation import TextStreamer  # type: ignore
+    except ImportError:
+        TextStreamer = None  # type: ignore
+
+    from collections import namedtuple
+
+    GreedySearchDecoderOnlyOutput = namedtuple(
+        "GreedySearchDecoderOnlyOutput", ["sequences", "scores"]
+    )
+    SampleDecoderOnlyOutput = namedtuple(
+        "SampleDecoderOnlyOutput", ["sequences", "scores"]
+    )
 
 
 @dataclass
