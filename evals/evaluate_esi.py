@@ -302,6 +302,7 @@ def main() -> int:
     print(f"[MambaESI eval] loaded {n_params/1e6:.1f}M params in {time.time()-t0:.1f}s")
 
     esi_extras_loaded = False
+    esi_extras_finite = True
     if args.esi_extras:
         extras_path = Path(args.esi_extras)
         if not extras_path.exists():
@@ -310,11 +311,26 @@ def main() -> int:
             state = torch.load(extras_path, map_location=device, weights_only=True)
         except (TypeError, RuntimeError):
             state = torch.load(extras_path, map_location=device)
+        # Health-check the trained weights *before* we overwrite the random
+        # init: if training NaN'd out, the saved checkpoint will silently
+        # turn the model into a garbage generator.
+        for sub in ("question_embedding", "embedding_proj", "injection_proj"):
+            for pname, ptens in state[sub].items():
+                if not torch.isfinite(ptens).all():
+                    esi_extras_finite = False
+                    n_bad = int((~torch.isfinite(ptens)).sum().item())
+                    print(f"[MambaESI eval] WARNING: {n_bad}/{ptens.numel()} non-finite "
+                          f"values in {sub}.{pname}")
         model.question_embedding.load_state_dict(state["question_embedding"])
         model.backbone.embedding_proj.load_state_dict(state["embedding_proj"])
         model.backbone.injection_proj.load_state_dict(state["injection_proj"])
         esi_extras_loaded = True
-        print(f"[MambaESI eval] loaded trained ESI extras from {extras_path}")
+        if esi_extras_finite:
+            print(f"[MambaESI eval] loaded trained ESI extras from {extras_path}")
+        else:
+            print(f"[MambaESI eval] WARNING: loaded ESI extras from {extras_path} but "
+                  "they contain non-finite values. Eval results will be meaningless. "
+                  "Re-run training with a lower --lr / different --amp setting.")
 
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer)
 
@@ -374,6 +390,7 @@ def main() -> int:
             "esi_top_k": args.top_k,
             "esi_extras_loaded": esi_extras_loaded,
             "esi_extras_path": args.esi_extras,
+            "esi_extras_finite": esi_extras_finite,
         },
         "smoke": {"prompt": prompt, "next_token_vanilla": smoke_pred},
         "perplexity": {

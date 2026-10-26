@@ -1,0 +1,18 @@
+[train_esi] device=cpu dtype=torch.float32
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enabl[train_esi] device=cpu dtype=torch.float32
+[MambaESI] randomly initialised (missing from checkpoint): ['question_embedding.weight', 'question_embedding.bias', 'backbone.embedding_proj.weight', 'backbone.embedding_proj.bias', 'backbone.injection_proj.weight', 'backbone.injection_proj.bias']
+[train_esi] loaded 130.9M params in 2.0s
+[train_esi] trainable params: 1,771,776 (1.35% of total)
+[train_esi] loading 80 SQuAD examples (max_len=320)...
+[train_esi] usable examples after filtering: 80
+[train_esi] epoch=0 step=   1 loss=3.0989 lr=1.00e-04 t=61.3s
+[train_esi] epoch=0 step=   5 loss=1.4370 lr=5.00e-04 t=452.4s
+[train_esi] epoch=0 step=  10 loss=2.0051 lr=4.84e-04 t=1009.2s
+[train_esi] epoch=0 step=  15 loss=1.3608 lr=4.23e-04 t=2174.8s
+[train_esi] epoch=0 step=  20 loss=1.7040 lr=3.27e-04 t=2912.7s
+[train_esi] epoch=1 step=  25 loss=1.2532 lr=2.16e-04 t=3436.0s
+[train_esi] epoch=1 step=  30 loss=1.4139 lr=1.12e-04 t=6375.4s
+[train_esi] epoch=1 step=  35 loss=1.1931 lr=3.54e-05 t=6803.0s
+[train_esi] epoch=1 step=  40 loss=0.9444 lr=1.01e-06 t=7157.3s
+[train_esi] saved ESI extras -> /Users/aniketdey/Documents/GitHub/mamba-esi/evals/esi_extras.pt
+[train_esi] wrote metrics -> /Users/aniketdey/Documents/GitHub/mamba-esi/evals/train_metrics.json

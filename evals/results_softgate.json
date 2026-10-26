@@ -1,0 +1,217 @@
+{
+  "config": {
+    "model": "state-spaces/mamba-130m",
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "n_params": 130907136,
+    "esi_top_k": 5
+  },
+  "smoke": {
+    "prompt": "The Eiffel Tower is located in",
+    "next_token_vanilla": " Paris"
+  },
+  "perplexity": {
+    "per_passage": [
+      {
+        "idx": 0,
+        "esi_off": 76.58069610595703,
+        "esi_on": 33918.375,
+        "n_chars": 319
+      },
+      {
+        "idx": 1,
+        "esi_off": 10.726924896240234,
+        "esi_on": 6041.70703125,
+        "n_chars": 296
+      },
+      {
+        "idx": 2,
+        "esi_off": 12.6295804977417,
+        "esi_on": 13202.859375,
+        "n_chars": 307
+      },
+      {
+        "idx": 3,
+        "esi_off": 25.004478454589844,
+        "esi_on": 108.08676147460938,
+        "n_chars": 314
+      }
+    ],
+    "mean_esi_off": 31.235419988632202,
+    "mean_esi_on": 13317.757041931152
+  },
+  "lambada": {
+    "accuracy_esi_off": 0.875,
+    "accuracy_esi_on": 0.125,
+    "rows_esi_off": [
+      {
+        "question": "Where did Sarah's plane land?",
+        "gold": " Paris",
+        "pred": " Paris",
+        "correct": true
+      },
+      {
+        "question": "What did the detective conclude about the criminal?",
+        "gold": " man",
+        "pred": " man",
+        "correct": true
+      },
+      {
+        "question": "What was the final ingredient added to the dish?",
+        "gold": " salt",
+        "pred": " salt",
+        "correct": true
+      },
+      {
+        "question": "What did Mary look forward to?",
+        "gold": " boat",
+        "pred": " boat",
+        "correct": true
+      },
+      {
+        "question": "What instrument was the young musician about to play?",
+        "gold": " piano",
+        "pred": " piano",
+        "correct": true
+      },
+      {
+        "question": "Where did Tom rest after his hike?",
+        "gold": " mountain",
+        "pred": " mountain",
+        "correct": true
+      },
+      {
+        "question": "Which planet was the astronaut orbiting?",
+        "gold": " Earth",
+        "pred": ",",
+        "correct": false
+      },
+      {
+        "question": "What were visitors not allowed to handle?",
+        "gold": " book",
+        "pred": " book",
+        "correct": true
+      }
+    ],
+    "rows_esi_on": [
+      {
+        "question": "Where did Sarah's plane land?",
+        "gold": " Paris",
+        "pred": ",",
+        "correct": false
+      },
+      {
+        "question": "What did the detective conclude about the criminal?",
+        "gold": " man",
+        "pred": " .",
+        "correct": false
+      },
+      {
+        "question": "What was the final ingredient added to the dish?",
+        "gold": " salt",
+        "pred": ",",
+        "correct": false
+      },
+      {
+        "question": "What did Mary look forward to?",
+        "gold": " boat",
+        "pred": " boat",
+        "correct": true
+      },
+      {
+        "question": "What instrument was the young musician about to play?",
+        "gold": " piano",
+        "pred": ",",
+        "correct": false
+      },
+      {
+        "question": "Where did Tom rest after his hike?",
+        "gold": " mountain",
+        "pred": ".",
+        "correct": false
+      },
+      {
+        "question": "Which planet was the astronaut orbiting?",
+        "gold": " Earth",
+        "pred": ".",
+        "correct": false
+      },
+      {
+        "question": "What were visitors not allowed to handle?",
+        "gold": " book",
+        "pred": ".",
+        "correct": false
+      }
+    ]
+  },
+  "retrieval": [
+    {
+      "question": "What is Jane's profession?",
+      "top_indices": [
+        12,
+        18,
+        25,
+        60,
+        23
+      ],
+      "top_tokens": [
+        " in",
+        " in",
+        " in",
+        " and",
+        " and"
+      ]
+    },
+    {
+      "question": "Where does Jane live?",
+      "top_indices": [
+        29,
+        37,
+        8,
+        59,
+        64
+      ],
+      "top_tokens": [
+        " cottage",
+        " research",
+        " marine",
+        "ours",
+        "d"
+      ]
+    },
+    {
+      "question": "Which animal does Jane study?",
+      "top_indices": [
+        29,
+        7,
+        64,
+        38,
+        61
+      ],
+      "top_tokens": [
+        " cottage",
+        "old",
+        "d",
+        " subject",
+        " b"
+      ]
+    },
+    {
+      "question": "What does Jane do on weekends?",
+      "top_indices": [
+        43,
+        18,
+        25,
+        12,
+        2
+      ],
+      "top_tokens": [
+        ",",
+        " in",
+        " in",
+        " in",
+        " a"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[MambaESI eval] device=cpu, dtype=torch.float32, model=state-spaces/mamba-130m
+[MambaESI] randomly initialised (missing from checkpoint): ['question_embedding.weight', 'question_embedding.bias', 'backbone.embedding_proj.weight', 'backbone.embedding_proj.bias', 'backbone.injection_proj.weight', 'backbone.injection_proj.bias']
+[MambaESI eval] loaded 130.9M params in 2.6s
+[smoke] vanilla Mamba next token after 'The Eiffel Tower is located in': ' Paris'
+
+[Perplexity, lower is better]
+  passage 0: esi_off=  76.58   esi_on=    inf
+  passage 1: esi_off=  10.73   esi_on=99837840.00
+  passage 2: esi_off=  12.63   esi_on=    inf
+  passage 3: esi_off=  25.00   esi_on=22560.53
+  mean       : esi_off=  31.24   esi_on=    inf
+
+[LAMBADA-style last-word accuracy, higher is better]
+  esi_off:  87.5%   esi_on:   0.0%   (n=8)
+  [0] gold=  ' Paris'   off=  ' Paris'(Y)   on=  ' BASIS'(n)
+  [1] gold=    ' man'   off=    ' man'(Y)   on=      'se'(n)
+  [2] gold=   ' salt'   off=   ' salt'(Y)   on=' triglycer'(n)
+  [3] gold=   ' boat'   off=   ' boat'(Y)   on=       '.'(n)
+  [4] gold=  ' piano'   off=  ' piano'(Y)   on=       '1'(n)
+  [5] gold=' mountain'   off=' mountain'(Y)   on=       ','(n)
+  [6] gold=  ' Earth'   off=       ','(n)   on=       ','(n)
+  [7] gold=   ' book'   off=   ' book'(Y)   on=      ' 5'(n)
+
+[ESI retrieval: top-5 tokens selected per question, against shared context]
+  Q: What is Jane's profession?
+     top tokens: [' in', ' in', ' in', ' and', ' and']
+  Q: Where does Jane live?
+     top tokens: [' cottage', ' research', ' marine', 'ours', 'd']
+  Q: Which animal does Jane study?
+     top tokens: [' cottage', 'old', 'd', ' subject', ' b']
+  Q: What does Jane do on weekends?
+     top tokens: [',', ' in', ' in', ' in', ' a']
+
+[MambaESI eval] wrote results to /Users/aniketdey/Documents/GitHub/mamba-esi/evals/results.json

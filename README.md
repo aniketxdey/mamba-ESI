@@ -2,7 +2,7 @@
 
 ![Mamba](assets/selection.png "Selective State Space")
 > **Mamba-ESI: Introducing Embedding Search to Selective SSMs**\
-> Yu-Wing Tai (Advisor), Abhinav Reddy, Aniket Dey\
+> Aniket Dey, Yu-Wing Tai, Peter Chin\
 > *Based on the original Mamba architecture by Albert Gu, Tri Dao*\
 > Original Paper: https://arxiv.org/abs/2312.00752
 
@@ -29,8 +29,6 @@ Other requirements:
 - CUDA 11.6+
 
 ## Usage
-
-We expose several levels of interface with the Mamba-ESI model.
 
 ### Selective SSM
 
